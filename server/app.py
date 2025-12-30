@@ -20,6 +20,24 @@ def index():
     body = {'message': 'Flask SQLAlchemy Lab 1'}
     return make_response(body, 200)
 
+@app.route('/earthquakes/<int:id>')
+def earthquake(id):
+    earthquake = Earthquake.query.get(id)
+    
+    if earthquake:
+        return earthquake.to_dict()
+
+    return {"message": f"Earthquake {id} not found."}, 404
+
+@app.route('/earthquakes/magnitude/<float:magnitude>')
+def earthquakes_by_magnitude(magnitude):
+    quakes = Earthquake.query.filter(Earthquake.magnitude >= magnitude).all()
+    return {
+        "count": len(quakes),
+        "quakes": [quake.to_dict() for quake in quakes]
+    }   
+    
+
 # Add views here
 
 
